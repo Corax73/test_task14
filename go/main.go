@@ -5,6 +5,7 @@ import (
 	"math"
 	"regexp"
 	"slices"
+	"strings"
 	"time"
 )
 
@@ -12,7 +13,7 @@ type Solutions struct{}
 
 func main() {
 	solution := Solutions{}
-	fmt.Println(solution.findWeekend( /*"05.05.2024", "25.05.2024"*/ "2024-05-05", "2024-05-25"))
+	solution.getFindWeekend()
 }
 
 func (solution *Solutions) getBinarySearch() {
@@ -48,6 +49,11 @@ func (solutions *Solutions) binarySearch(array []int, searchedInt int) int {
 	return resp
 }
 
+func (solution *Solutions) getFindWeekend() {
+	fmt.Println(solution.findWeekend("05.05.2024", "25.05.2024"))
+}
+
+// findWeekend if the arguments are correct, returns the number of days off in the passed time period, otherwise returns -1.
 func (solutions *Solutions) findWeekend(begin, end string) int {
 	resp := -1
 	_, err := regexp.Compile(`06.06.2020`)
@@ -57,10 +63,12 @@ func (solutions *Solutions) findWeekend(begin, end string) int {
 	matchedBegin, _ := regexp.MatchString(`\d+.\d+.\d+`, begin)
 	matchedEnd, _ := regexp.MatchString(`\d+.\d+.\d+`, end)
 	if matchedBegin && matchedEnd {
+		begin = solutions.formatDateString(begin)
 		timeBegin, err := time.Parse(time.DateOnly, begin)
 		if err != nil {
 			fmt.Println(err)
 		} else {
+			end = solutions.formatDateString(end)
 			timeEnd, err := time.Parse(time.DateOnly, end)
 			if err != nil {
 				fmt.Println(err)
@@ -81,5 +89,18 @@ func (solutions *Solutions) findWeekend(begin, end string) int {
 			}
 		}
 	}
+	return resp
+}
+
+// formatDateString formats the passed time string to the time.DateOnly format.
+func (solutions *Solutions) formatDateString(str string) string {
+	strArr := strings.Split(str, ".")
+	var strBuilder strings.Builder
+	for i := 2; i >= 0; i-- {
+		strBuilder.WriteString(strArr[i])
+		strBuilder.WriteString("-")
+	}
+	resp := strings.Trim(strBuilder.String(), "-")
+	strBuilder.Reset()
 	return resp
 }
