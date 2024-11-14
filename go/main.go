@@ -5,6 +5,7 @@ import (
 	"math"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -13,7 +14,7 @@ type Solutions struct{}
 
 func main() {
 	solution := Solutions{}
-	solution.getFindWeekend()
+	solution.getRgbToInt()
 }
 
 func (solution *Solutions) getBinarySearch() {
@@ -102,5 +103,35 @@ func (solutions *Solutions) formatDateString(str string) string {
 	}
 	resp := strings.Trim(strBuilder.String(), "-")
 	strBuilder.Reset()
+	return resp
+}
+
+func (solution *Solutions) getRgbToInt() {
+	fmt.Println(solution.rgbToInt(255, 0, 255))
+}
+
+// rgbToInt converts a set of rgb color values ​​to an integer.
+func (solutions *Solutions) rgbToInt(red, green, blue int64) int64 {
+	var resp int64
+	resp = -1
+	if red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255 {
+		arr := []int64{red, green, blue}
+		var strBuilder strings.Builder
+		for _, color := range arr {
+			temp := strconv.FormatInt(color, 16)
+			if len(temp) < 2 {
+				strBuilder.WriteString("0")
+			}
+			strBuilder.WriteString(temp)
+		}
+		str := strBuilder.String()
+		strBuilder.Reset()
+		temp, err := strconv.ParseInt(str, 16, 64)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			resp = temp
+		}
+	}
 	return resp
 }
