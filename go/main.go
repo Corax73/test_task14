@@ -14,10 +14,10 @@ type Solutions struct{}
 
 func main() {
 	solution := Solutions{}
-	solution.getRgbToInt()
+	solution.GetFiborow()
 }
 
-func (solution *Solutions) getBinarySearch() {
+func (solution *Solutions) GetBinarySearch() {
 	slice := []int{4, 8, 15, 15, 16, 23, 42}
 	searchedInt := 15
 	fmt.Println(solution.binarySearch(slice, searchedInt))
@@ -50,7 +50,7 @@ func (solutions *Solutions) binarySearch(array []int, searchedInt int) int {
 	return resp
 }
 
-func (solution *Solutions) getFindWeekend() {
+func (solution *Solutions) GetFindWeekend() {
 	fmt.Println(solution.findWeekend("05.05.2024", "25.05.2024"))
 }
 
@@ -106,7 +106,7 @@ func (solutions *Solutions) formatDateString(str string) string {
 	return resp
 }
 
-func (solution *Solutions) getRgbToInt() {
+func (solution *Solutions) GetRgbToInt() {
 	fmt.Println(solution.rgbToInt(255, 0, 255))
 }
 
@@ -132,6 +132,35 @@ func (solutions *Solutions) rgbToInt(red, green, blue int64) int64 {
 		} else {
 			resp = temp
 		}
+	}
+	return resp
+}
+
+func (solution *Solutions) GetFiborow() {
+	fmt.Println(solution.fiborow(math.MaxInt64))
+}
+
+// fiborow if the argument is valid, returns the Fibonacci sequence string up to the value of the argument, otherwise -1.
+func (solutions *Solutions) fiborow(limit int64) string {
+	resp := "-1"
+	if limit > 0 && limit <= math.MaxInt64 {
+		var fibArr []int64
+		fibArr = append(fibArr, int64(0))
+		fibArr = append(fibArr, int64(1))
+		for i := 2; fibArr[i - 1] + fibArr[i - 2] < limit; i++ {
+			newEl := fibArr[i - 1] + fibArr[i - 2]
+			fibArr = append(fibArr, newEl)
+			if math.MaxInt64 - fibArr[i - 1] <= newEl {
+				break
+			}
+		}
+		var strBuilder strings.Builder
+		for _, val := range fibArr {
+			strBuilder.WriteString(strconv.FormatInt(val, 10))
+			strBuilder.WriteString(" ")
+		}
+		resp = strings.Trim(strBuilder.String(), " ")
+		strBuilder.Reset()
 	}
 	return resp
 }
